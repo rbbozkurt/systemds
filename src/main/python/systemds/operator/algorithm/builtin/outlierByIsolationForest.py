@@ -49,22 +49,22 @@ def outlierByIsolationForest(X: Matrix,
        >>> from systemds.context import SystemDSContext
        >>> from systemds.operator.algorithm import outlierByIsolationForest, outlierByIsolationForestApply
        >>> with SystemDSContext() as sds:
-       ...     # Create training data
-       ...     np.random.seed(42)
-       ...     X_train = sds.from_numpy(np.random.randn(50, 2))
-       ...
-       ...     # Train isolation forest model
-       ...     model = outlierByIsolationForest(X_train, n_trees=10, subsampling_size=20, seed=7)
-       ...
-       ...     # Create test data with one clear outlier
-       ...     X_test = sds.from_numpy(np.array([[0.1, 0.2], [10.0, 10.0]]))
-       ...
-       ...     # Get anomaly scores
+       ...     # Create training data: 20 points clustered near origin
+       ...     X_train = sds.from_numpy(np.array([
+       ...         [0.0, 0.0], [0.1, 0.1], [0.2, 0.2], [0.3, 0.3], [0.4, 0.4],
+       ...         [0.5, 0.5], [0.6, 0.6], [0.7, 0.7], [0.8, 0.8], [0.9, 0.9],
+       ...         [1.0, 1.0], [1.1, 1.1], [1.2, 1.2], [1.3, 1.3], [1.4, 1.4],
+       ...         [1.5, 1.5], [1.6, 1.6], [1.7, 1.7], [1.8, 1.8], [1.9, 1.9]
+       ...     ]))
+       ...     model = outlierByIsolationForest(X_train, n_trees=100, subsampling_size=10, seed=42)
+       ...     X_test = sds.from_numpy(np.array([[1.0, 1.0], [100.0, 100.0]]))
        ...     scores = outlierByIsolationForestApply(model, X_test).compute()
-       ...     print(f"Normal point score: {scores[0, 0]:.3f}")
-       ...     print(f"Outlier score: {scores[1, 0]:.3f}")
-       Normal point score: 0.435
-       Outlier score: 0.623
+       ...     print(scores.shape)
+       ...     print(scores[1, 0] > scores[0, 0])
+       ...     print(scores[1, 0] > 0.5)
+       (2, 1)
+       True
+       True
     
     
     

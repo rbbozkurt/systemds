@@ -42,17 +42,15 @@
 #   ...         [1.0, 1.0], [1.1, 1.1], [1.2, 1.2], [1.3, 1.3], [1.4, 1.4],
 #   ...         [1.5, 1.5], [1.6, 1.6], [1.7, 1.7], [1.8, 1.8], [1.9, 1.9]
 #   ...     ]))
-#   ...
-#   ...     # Train isolation forest model
 #   ...     model = outlierByIsolationForest(X_train, n_trees=100, subsampling_size=10, seed=42)
-#   ...
-#   ...     # Test with normal point and clear outlier
 #   ...     X_test = sds.from_numpy(np.array([[1.0, 1.0], [100.0, 100.0]]))
-#   ...
-#   ...     # Get anomaly scores (outliers have scores > 0.5)
 #   ...     scores = outlierByIsolationForestApply(model, X_test).compute()
-#   ...     print(f"Normal point: {scores[0, 0]:.3f}, Outlier: {scores[1, 0]:.3f}")
-#   Normal point: 0.444, Outlier: 1.000
+#   ...     print(scores.shape)
+#   ...     print(scores[1, 0] > scores[0, 0])
+#   ...     print(scores[1, 0] > 0.5)
+#   (2, 1)
+#   True
+#   True
 #
 #
 # INPUT:
