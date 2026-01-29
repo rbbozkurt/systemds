@@ -44,7 +44,7 @@ public class BuiltinIsolationForestTest extends AutomatedTestBase {
 
 	@Override
 	public void setUp() {
-		addTestConfiguration(TEST_NAME, new TestConfiguration(TEST_CLASS_DIR, TEST_NAME,
+        addTestConfiguration(TEST_NAME, new TestConfiguration(TEST_CLASS_DIR, TEST_NAME,
 			new String[]{"model", "subsampling_size"}));
 	}
 
@@ -96,7 +96,7 @@ public class BuiltinIsolationForestTest extends AutomatedTestBase {
 			Assert.assertTrue("Model should have entries", model.size() > 0);
 
 			// Verify subsampling size was stored correctly
-			HashMap<CellIndex, Double> subsamplingSize = readDMLMatrixFromOutputDir("subsampling_size");
+			HashMap<CellIndex, Double> subsamplingSize = readDMLScalarFromOutputDir("subsampling_size");
 			Assert.assertEquals("Subsampling size should match",
 				(double) subsampling_size,
 				subsamplingSize.get(new CellIndex(1, 1)),

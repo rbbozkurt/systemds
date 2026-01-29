@@ -49,18 +49,7 @@ class TestOUTLIERBYISOLATIONFORESTAPPLY(unittest.TestCase):
             expected = """(2, 1)
 True
 True"""
-        actual_lines = buf.getvalue().strip().split('\n')
-        filtered = []
-        for line in actual_lines:
-            if line.startswith('Warning:'):
-                continue
-            if line.startswith('WARNING:'):
-                continue
-            if 'Unable to load native-hadoop library' in line:
-                continue
-            filtered.append(line)
-        actual_output = '\n'.join(filtered).strip()
-        self.assertEqual(actual_output, expected)
+        self.assertEqual(buf.getvalue().strip(), expected)
 
 
 if __name__ == '__main__':

@@ -126,8 +126,8 @@ m_iForest = function(Matrix[Double] X, Integer n_trees, Integer subsampling_size
   return(Matrix[Double] M)
 {
   # check assumptions
-  s_warning_assert(n_trees > 0, "iForest: Requirement n_trees > 0 not satisfied! ntrees: "+toString(n_trees))
-  s_warning_assert(subsampling_size > 1 & subsampling_size <= nrow(X), "iForest: Requirement 0 < subsampling_size <= nrow(X) not satisfied! subsampling_size: "+toString(subsampling_size)+"; nrow(X): "+toString(nrow(X)))
+  s_warning_assert_outlierByIsolationForest(n_trees > 0, "iForest: Requirement n_trees > 0 not satisfied! ntrees: "+toString(n_trees))
+  s_warning_assert_outlierByIsolationForest(subsampling_size > 1 & subsampling_size <= nrow(X), "iForest: Requirement 0 < subsampling_size <= nrow(X) not satisfied! subsampling_size: "+toString(subsampling_size)+"; nrow(X): "+toString(nrow(X)))
 
   height_limit = ceil(log(subsampling_size, 2))
   tree_size = 2*(2^(height_limit+1)-1)
@@ -219,8 +219,8 @@ m_iTree = function(Matrix[Double] X, Integer max_depth, Integer seed = -1)
   return(Matrix[Double] M)
 {
   # check assumptions
-  s_warning_assert(max_depth > 0 & max_depth <= 32, "iTree: Requirement 0 < max_depth < 32 not satisfied! max_depth: " + max_depth)
-  s_warning_assert(nrow(X) > 0, "iTree: Feature matrix X has no less than 2 rows!")
+  s_warning_assert_outlierByIsolationForest(max_depth > 0 & max_depth <= 32, "iTree: Requirement 0 < max_depth < 32 not satisfied! max_depth: " + max_depth)
+  s_warning_assert_outlierByIsolationForest(nrow(X) > 0, "iTree: Feature matrix X has no less than 2 rows!")
 
 
   # Initialize M to largest possible matrix given max_depth
@@ -315,7 +315,7 @@ s_drawSplitPoint = function(Matrix[Double] X, Integer seed = -1)
 s_addExternalINode = function(Matrix[Double] X_node, Integer node_id, Matrix[Double] M)
   return(Matrix[Double] M)
 {
-  s_warning_assert(node_id > 0, "s_addExternalINode: Requirement `node_id > 0` not satisfied!")
+  s_warning_assert_outlierByIsolationForest(node_id > 0, "s_addExternalINode: Requirement `node_id > 0` not satisfied!")
 
   node_start_index = 2*node_id-1
   M[, node_start_index] = 0
@@ -343,8 +343,8 @@ s_addExternalINode = function(Matrix[Double] X_node, Integer node_id, Matrix[Dou
 s_addInternalINode = function(Integer node_id, Integer split_feature, Double split_value, Matrix[Double] M)
   return(Matrix[Double] M)
 {
-  s_warning_assert(node_id > 0, "s_addInternalINode: Requirement `node_id > 0` not satisfied!")
-  s_warning_assert(split_feature > 0, "s_addInternalINode: Requirement `split_feature > 0` not satisfied!")
+  s_warning_assert_outlierByIsolationForest(node_id > 0, "s_addInternalINode: Requirement `node_id > 0` not satisfied!")
+  s_warning_assert_outlierByIsolationForest(split_feature > 0, "s_addInternalINode: Requirement `split_feature > 0` not satisfied!")
 
   node_start_index = 2*node_id-1
   M[, node_start_index] = split_feature
@@ -371,8 +371,8 @@ s_addInternalINode = function(Integer node_id, Integer split_feature, Double spl
 s_isExternalINode = function(Matrix[Double] X_node, Integer node_id, Integer max_depth)
   return(Boolean isExternalNode)
 {
-  s_warning_assert(max_depth > 0, "s_isExternalINode: Requirement `max_depth > 0` not satisfied!")
-  s_warning_assert(node_id > 0, "s_isExternalINode: Requirement `node_id > 0` not satisfied!")
+  s_warning_assert_outlierByIsolationForest(max_depth > 0, "s_isExternalINode: Requirement `max_depth > 0` not satisfied!")
+  s_warning_assert_outlierByIsolationForest(node_id > 0, "s_isExternalINode: Requirement `node_id > 0` not satisfied!")
 
   node_depth = floor(log(node_id, 2))
   isExternalNode = node_depth >= max_depth | nrow(X_node) <= 1
@@ -404,9 +404,9 @@ s_isExternalINode = function(Matrix[Double] X_node, Integer node_id, Integer max
 s_splitINode = function(Matrix[Double] X_node, Integer node_id, Integer split_feature, Double split_value)
   return(Integer left_id, Matrix[Double] X_left, Integer right_id, Matrix[Double] X_right)
 {
-  s_warning_assert(nrow(X_node) > 0, "s_splitINode: Requirement `nrow(X_node) > 0` not satisfied!")
-  s_warning_assert(node_id > 0, "s_splitINode: Requirement `nrow(X_node) > 0` not satisfied!")
-  s_warning_assert(split_feature > 0, "s_splitINode: Requirement `split_feature > 0` not satisfied!")
+  s_warning_assert_outlierByIsolationForest(nrow(X_node) > 0, "s_splitINode: Requirement `nrow(X_node) > 0` not satisfied!")
+  s_warning_assert_outlierByIsolationForest(node_id > 0, "s_splitINode: Requirement `nrow(X_node) > 0` not satisfied!")
+  s_warning_assert_outlierByIsolationForest(split_feature > 0, "s_splitINode: Requirement `split_feature > 0` not satisfied!")
 
   left_rows_mask = X_node[, split_feature] <= split_value
 
@@ -439,7 +439,7 @@ s_splitINode = function(Matrix[Double] X_node, Integer node_id, Integer split_fe
 s_sampleRows = function(Matrix[Double] X, Integer size, Integer seed = -1)
   return(Matrix[Double] X_extracted)
 {
-  s_warning_assert(size > 0 & nrow(X) >= size, "s_sampleRows: Requirements `size > 0 & nrow(X) >= size` not satisfied")
+  s_warning_assert_outlierByIsolationForest(size > 0 & nrow(X) >= size, "s_sampleRows: Requirements `size > 0 & nrow(X) >= size` not satisfied")
   random_vector = rand(rows=nrow(X), cols=1, seed=seed)
   X_rand = cbind(X, random_vector)
 
@@ -458,8 +458,8 @@ s_sampleRows = function(Matrix[Double] X, Integer size, Integer seed = -1)
 # assertion     Boolean                         Assertion to check
 # warning       String                          Warning message to print if assertion is violated
 # ---------------------------------------------------------------------------------------------
-s_warning_assert = function(Boolean assertion, String warning)
+s_warning_assert_outlierByIsolationForest = function(Boolean assertion, String warning)
 {
   if (!assertion)
-    print("WARNING! "+warning)
+    print("outlierIsolationForest: "+warning)
 }

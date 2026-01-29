@@ -196,9 +196,9 @@ s_cn = function(Integer n)
   # for low n. We hence calculate it directly for the first 1000 values
   # TODO: Discuss a good value for n --> use e.g. HarmonicNumber(1000) - (ln(1000) + 0.5772156649) in WA
   if (n < 1000) {
-    H_nminus1 = 0
-    for (i in 1:n-1)
-      H_nminus1 = H_nminus1 + 1/i;
+    indices = seq(1,n-1)
+    H_nminus1 =  sum(1/indices)
+
   }
   else{
     # Euler–Mascheroni's constant
@@ -239,3 +239,18 @@ m_score = function(Matrix[Double] M, Matrix[Double] x, Integer n)
   score = 2^-(mean(h)/s_cn(n))
 }
 
+# Function that gives a warning if a assertion is violated. This is used instead of `assert` and
+# `stop` since these function can not be used in parfor .
+#
+# INPUT PARAMETERS:
+# ---------------------------------------------------------------------------------------------
+# NAME          TYPE             DEFAULT      MEANING
+# ---------------------------------------------------------------------------------------------
+# assertion     Boolean                         Assertion to check
+# warning       String                          Warning message to print if assertion is violated
+# ---------------------------------------------------------------------------------------------
+s_warning_assert = function(Boolean assertion, String warning)
+{
+  if (!assertion)
+    print("outlierIsolationForest: "+warning)
+}
