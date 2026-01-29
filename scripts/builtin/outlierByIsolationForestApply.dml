@@ -85,7 +85,7 @@ m_outlierByIsolationForestApply = function(List[Unknown] iForestModel, Matrix[Do
   assert(ncol(M) == tree_size & nrow(M) > 1)
 
   anomaly_scores = matrix(0, rows=nrow(X), cols=1)
-  parfor (i_x in 1:nrow(X)) {
+  for ( i_x in 1:nrow(X)) {
     anomaly_scores[i_x, 1] = m_score(M, X[i_x,], subsampling_size)
   }
 }
@@ -232,7 +232,7 @@ m_score = function(Matrix[Double] M, Matrix[Double] x, Integer n)
   s_warning_assert(nrow(M) > 1, "m_score: invalid iForest Model!")
 
   h = matrix(0, cols=nrow(M), rows=1)
-  parfor (i_iTree in 1:nrow(M)) {
+  for (i_iTree in 1:nrow(M)) {
     h[1, i_iTree] = m_PathLength(M[i_iTree,], x)
   }
 
