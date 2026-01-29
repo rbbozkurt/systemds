@@ -19,13 +19,13 @@
 
 package org.apache.sysds.test.functions.builtin.part2;
 
-import org.junit.Assert;
-import org.junit.Test;
 import org.apache.sysds.common.Types.ExecMode;
 import org.apache.sysds.runtime.matrix.data.MatrixValue.CellIndex;
 import org.apache.sysds.test.AutomatedTestBase;
 import org.apache.sysds.test.TestConfiguration;
 import org.apache.sysds.test.TestUtils;
+import org.junit.Assert;
+import org.junit.Test;
 
 import java.util.HashMap;
 
@@ -117,12 +117,12 @@ public class BuiltinIsolationForestTest extends AutomatedTestBase {
             // Verify model was created
             HashMap<CellIndex, Double> model = readDMLMatrixFromOutputDir("model");
             Assert.assertNotNull("Model should not be null", model);
-            Assert.assertTrue("Model should have entries", model.size() > 0);
+            Assert.assertFalse("Model should have entries", model.isEmpty());
 
             // Verify subsampling size was stored correctly
             HashMap<CellIndex, Double> subsamplingSize = readDMLScalarFromOutputDir("subsampling_size");
             Assert.assertEquals("Subsampling size should match",
-                    (double) subsampling_size,
+                    subsampling_size,
                     subsamplingSize.get(new CellIndex(1, 1)),
                     eps);
 
@@ -132,8 +132,7 @@ public class BuiltinIsolationForestTest extends AutomatedTestBase {
                 maxRow = Math.max(maxRow, idx.row);
             }
             Assert.assertEquals("Model should have n_trees rows", n_trees, maxRow);
-        }
-        finally {
+        } finally {
             rtplatform = platformOld;
         }
     }
