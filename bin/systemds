@@ -72,7 +72,8 @@ if [ -n "$SYSTEMDS_STANDALONE_OPTS" ]; then
 	print_out "Overriding SYSTEMDS_STANDALONE_OPTS with env var: $SYSTEMDS_STANDALONE_OPTS"
 else
   # specify parameters  to java when running locally here
-  SYSTEMDS_STANDALONE_OPTS="-Xmx4g -Xms4g -Xmn400m "
+  # Note: locale flags added to avoid Turkish locale issues with case conversion
+  SYSTEMDS_STANDALONE_OPTS="-Duser.language=en -Duser.country=US -Xmx4g -Xms4g -Xmn400m "
 fi
 
 if [ -n "$SYSTEMDS_REMOTE_DEBUGGING" ]; then

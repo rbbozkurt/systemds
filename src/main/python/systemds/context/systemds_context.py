@@ -299,7 +299,8 @@ class SystemDSContext(object):
         :param port: The port address to use if -1 chose random port."""
 
         # Base command
-        command = ["java", "--add-modules=jdk.incubator.vector", "-cp"]
+        # Note: locale flags added to avoid Turkish locale issues with case conversion
+        command = ["java", "-Duser.language=en", "-Duser.country=US", "--add-modules=jdk.incubator.vector", "-cp"]
 
         # Find the operating system specifc separator, nt means its Windows
         cp_separator = ";" if os.name == "nt" else ":"
