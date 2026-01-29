@@ -136,14 +136,13 @@ m_iForest = function(Matrix[Double] X, Integer n_trees, Integer subsampling_size
   M = matrix(-1, cols=tree_size, rows=n_trees)
   seeds = matrix(seq(1, n_trees), cols=n_trees, rows=1)*seed
 
-  for ( i_iTree in 1:n_trees) {
+  parfor ( i_iTree in 1:n_trees, taskpartitioner="STATIC") {
     # subsample rows
     tree_seed = ifelse(seed == -1, -1, as.scalar(seeds[1, i_iTree]))
     X_subsample = s_sampleRows(X, subsampling_size, tree_seed)
 
     # Build iTree
     tree_seed = ifelse(seed == -1, -1, tree_seed+42)
-    print("Running test for "+i_iTree)
     M_tree = m_iTree(X_subsample, height_limit, tree_seed)
 
     # Add iTree to the model

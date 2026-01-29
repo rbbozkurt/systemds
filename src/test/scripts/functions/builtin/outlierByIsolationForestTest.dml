@@ -25,5 +25,8 @@ model = outlierByIsolationForest(X=X, n_trees=$n_trees, subsampling_size=$subsam
 M = as.matrix(model['model'])
 subsampling_size_out = as.scalar(model['subsampling_size'])
 
+scores = outlierByIsolationForestApply(iForestModel=model, X=X)
+
+write(scores, $output)
 write(M, $model_output)
 write(subsampling_size_out, $subsampling_size_output)
